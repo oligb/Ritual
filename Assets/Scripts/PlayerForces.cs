@@ -76,13 +76,13 @@ public class PlayerForces : MonoBehaviour {
 
 			currentPlane=hitColliders[0].gameObject;
 			ray= new Ray(transform.position,currentPlane.transform.position-transform.position);
-			currentPlaneNormal= GetNormalFromRay(ray);
+			currentPlaneNormal= GetNormalFromRay(ray).normalized;
 			Debug.DrawRay(transform.position,currentPlaneNormal);
 
 			//currentPlaneNormal=currentPlane.transform.up;
 			Quaternion target = Quaternion.LookRotation(currentPlane.transform.forward,currentPlaneNormal);
 			secretPlayer.transform.rotation= Quaternion.Slerp(secretPlayer.transform.rotation,target,orientToPlaneLerpSpeed);
-			// rbody.AddForce(-currentPlaneNormal*towardsWallForce);
+			rbody.AddForce(-currentPlaneNormal*towardsWallForce);
 
 			Vector3 inputVector=new Vector3(inputX*moveForce,0f,inputY*moveForce);
 			Vector3 direction =secretPlayer.transform.rotation * inputVector;
@@ -100,14 +100,16 @@ public class PlayerForces : MonoBehaviour {
 
 		//jumps
 		if(onWall && Input.GetKeyDown("space")){
-			rbody.AddForce( currentPlaneNormal.normalized *jumpForce, ForceMode.Force);
-		} else if(Input.GetKey("space")){
-			Vector3 currentJumpVector=currentPlaneNormal.normalized;
-			rbody.AddForce(currentJumpVector*floatForce,ForceMode.Force);
+			rbody.AddForce(currentPlaneNormal*jumpForce,ForceMode.Impulse);
+		}
+		/*
+		if(Input.GetKey("space")){
+			Vector3 currentJumpVector=currentPlaneNormal;
+			rbody.AddForce(currentJumpVector*floatForce);
 		}
 
 
-
+*/
 
 		//forward accell
 
@@ -150,6 +152,7 @@ public class PlayerForces : MonoBehaviour {
 			Mesh mesh = meshCollider.sharedMesh;
 			Vector3[] vertices = mesh.vertices;
 			int[] triangles = mesh.triangles;
+			Debug.Log(hit.triangleIndex);
 			Vector3 p0 = vertices[triangles[hit.triangleIndex * 3 + 0]];
 			Vector3 p1 = vertices[triangles[hit.triangleIndex * 3 + 1]];
 			Vector3 p2 = vertices[triangles[hit.triangleIndex * 3 + 2]];
