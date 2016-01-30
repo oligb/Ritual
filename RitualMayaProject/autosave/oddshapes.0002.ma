@@ -1,9 +1,10 @@
 //Maya ASCII 2015 scene
-//Name: oddshapes.ma
-//Last modified: Sat, Jan 30, 2016 05:01:58 PM
+//Name: oddshapes.0002.ma
+//Last modified: Sat, Jan 30, 2016 05:01:55 PM
 //Codeset: UTF-8
 requires maya "2015";
 currentUnit -l centimeter -a degree -t film;
+fileInfo "exportedFrom" "/Users/matthew/Github/Ritual/RitualMayaProject/scenes/oddshapes.ma";
 fileInfo "application" "maya";
 fileInfo "product" "Maya 2015";
 fileInfo "version" "2015";
@@ -217,4 +218,4 @@ connectAttr "layerManager.dli[0]" "defaultLayer.id";
 connectAttr "renderLayerManager.rlmi[0]" "defaultRenderLayer.rlid";
 connectAttr "defaultRenderLayer.msg" ":defaultRenderingList1.r" -na;
 connectAttr "pCubeShape1.iog" ":initialShadingGroup.dsm" -na;
-// End of oddshapes.ma
+// End of oddshapes.0002.ma
