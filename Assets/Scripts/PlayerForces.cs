@@ -49,7 +49,7 @@ public class PlayerForces : MonoBehaviour {
 			onWall=false;
 		}
 		if(onWall){
-			currentPlaneNormal=hitColliders[0].transform.forward;
+			currentPlaneNormal=hitColliders[0].transform.up;
 			secretPlayer.transform.rotation = Quaternion.LookRotation(transform.forward,currentPlaneNormal);
 			rbody.AddForce(-currentPlaneNormal*towardsWallForce);
 

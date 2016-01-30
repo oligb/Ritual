@@ -11,9 +11,9 @@ FBXHeaderExtension:  {
 		Year: 2016
 		Month: 1
 		Day: 30
-		Hour: 12
-		Minute: 50
-		Second: 4
+		Hour: 13
+		Minute: 16
+		Second: 13
 		Millisecond: 0
 	}
 	Creator: "FBX SDK/FBX Plugins version 2015.0"
@@ -30,19 +30,19 @@ FBXHeaderExtension:  {
 			Comment: ""
 		}
 		Properties70:  {
-			P: "DocumentUrl", "KString", "Url", "", "/Users/matthew/Github/Ritual/RitualMayaProject/scenes/odd-triangle.fbx"
-			P: "SrcDocumentUrl", "KString", "Url", "", "/Users/matthew/Github/Ritual/RitualMayaProject/scenes/odd-triangle.fbx"
+			P: "DocumentUrl", "KString", "Url", "", "/Users/matthew/Github/Ritual/RitualMayaProject/scenes/odd-triangle-rotadod.fbx"
+			P: "SrcDocumentUrl", "KString", "Url", "", "/Users/matthew/Github/Ritual/RitualMayaProject/scenes/odd-triangle-rotadod.fbx"
 			P: "Original", "Compound", "", ""
 			P: "Original|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "Original|ApplicationName", "KString", "", "", "Maya"
 			P: "Original|ApplicationVersion", "KString", "", "", "2015"
-			P: "Original|DateTime_GMT", "DateTime", "", "", "30/01/2016 12:50:04.000"
-			P: "Original|FileName", "KString", "", "", "/Users/matthew/Github/Ritual/RitualMayaProject/scenes/odd-triangle.fbx"
+			P: "Original|DateTime_GMT", "DateTime", "", "", "30/01/2016 13:16:13.000"
+			P: "Original|FileName", "KString", "", "", "/Users/matthew/Github/Ritual/RitualMayaProject/scenes/odd-triangle-rotadod.fbx"
 			P: "LastSaved", "Compound", "", ""
 			P: "LastSaved|ApplicationVendor", "KString", "", "", "Autodesk"
 			P: "LastSaved|ApplicationName", "KString", "", "", "Maya"
 			P: "LastSaved|ApplicationVersion", "KString", "", "", "2015"
-			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "30/01/2016 12:50:04.000"
+			P: "LastSaved|DateTime_GMT", "DateTime", "", "", "30/01/2016 13:16:13.000"
 		}
 	}
 }
@@ -77,7 +77,7 @@ GlobalSettings:  {
 
 Documents:  {
 	Count: 1
-	Document: 105553124551680, "", "Scene" {
+	Document: 106102878271232, "", "Scene" {
 		Properties70:  {
 			P: "SourceObject", "object", "", ""
 			P: "ActiveAnimStackName", "KString", "", "", "Take 001"
@@ -250,7 +250,7 @@ Definitions:  {
 ;------------------------------------------------------------------
 
 Objects:  {
-	Geometry: 140456974475856, "Geometry::", "Mesh" {
+	Geometry: 140456974819840, "Geometry::", "Mesh" {
 		Vertices: *18 {
 			a: 2.28470945358276,-0.364900559186935,5.79929542541504,2.28470945358276,0.364900559186935,5.79929542541504,-1.11091470718384,0.364900559186935,-1.66980075836182,2.30163526535034,0.364900559186935,-4.60704946517944,-1.11091446876526,-0.364900559186935,-1.66980075836182,2.30163526535034,-0.364900559186935,-4.60704946517944
 		} 
@@ -310,7 +310,7 @@ Objects:  {
 			}
 		}
 	}
-	Model: 140456887939072, "Model::pCube1", "Mesh" {
+	Model: 140456888991744, "Model::pCube1", "Mesh" {
 		Version: 232
 		Properties70:  {
 			P: "RotationPivot", "Vector3D", "Vector", "",1.39985845935716,0,-0.218380345768881
@@ -319,12 +319,13 @@ Objects:  {
 			P: "InheritType", "enum", "", "",1
 			P: "ScalingMax", "Vector3D", "Vector", "",0,0,0
 			P: "DefaultAttributeIndex", "int", "Integer", "",0
+			P: "Lcl Rotation", "Lcl Rotation", "", "A",-90,0,0
 			P: "currentUVSet", "KString", "", "U", "map1"
 		}
 		Shading: T
 		Culling: "CullingOff"
 	}
-	Material: 140456974474688, "Material::lambert1", "" {
+	Material: 140456974772848, "Material::lambert1", "" {
 		Version: 102
 		ShadingModel: "lambert"
 		MultiLayer: 0
@@ -339,7 +340,7 @@ Objects:  {
 			P: "Opacity", "double", "Number", "",1
 		}
 	}
-	AnimationStack: 105553124141008, "AnimStack::Take 001", "" {
+	AnimationStack: 105553124138512, "AnimStack::Take 001", "" {
 		Properties70:  {
 			P: "LocalStart", "KTime", "Time", "",1924423250
 			P: "LocalStop", "KTime", "Time", "",230930790000
@@ -347,7 +348,7 @@ Objects:  {
 			P: "ReferenceStop", "KTime", "Time", "",230930790000
 		}
 	}
-	AnimationLayer: 140456974437376, "AnimLayer::BaseLayer", "" {
+	AnimationLayer: 140456974478864, "AnimLayer::BaseLayer", "" {
 	}
 }
 
@@ -357,16 +358,16 @@ Objects:  {
 Connections:  {
 	
 	;Model::pCube1, Model::RootNode
-	C: "OO",140456887939072,0
+	C: "OO",140456888991744,0
 	
 	;AnimLayer::BaseLayer, AnimStack::Take 001
-	C: "OO",140456974437376,105553124141008
+	C: "OO",140456974478864,105553124138512
 	
 	;Geometry::, Model::pCube1
-	C: "OO",140456974475856,140456887939072
+	C: "OO",140456974819840,140456888991744
 	
 	;Material::lambert1, Model::pCube1
-	C: "OO",140456974474688,140456887939072
+	C: "OO",140456974772848,140456888991744
 }
 ;Takes section
 ;----------------------------------------------------
