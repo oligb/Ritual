@@ -82,7 +82,7 @@ public class PlayerForces : MonoBehaviour {
 			//currentPlaneNormal=currentPlane.transform.up;
 			Quaternion target = Quaternion.LookRotation(currentPlane.transform.forward,currentPlaneNormal);
 			secretPlayer.transform.rotation= Quaternion.Slerp(secretPlayer.transform.rotation,target,orientToPlaneLerpSpeed);
-			rbody.AddForce(-currentPlaneNormal*towardsWallForce);
+			// rbody.AddForce(-currentPlaneNormal*towardsWallForce);
 
 			Vector3 inputVector=new Vector3(inputX*moveForce,0f,inputY*moveForce);
 			Vector3 direction =secretPlayer.transform.rotation * inputVector;
@@ -100,12 +100,10 @@ public class PlayerForces : MonoBehaviour {
 
 		//jumps
 		if(onWall && Input.GetKeyDown("space")){
-			rbody.AddForce(currentPlaneNormal*jumpForce,ForceMode.Impulse);
-		}
-
-		if(Input.GetKey("space")){
-			Vector3 currentJumpVector=currentPlaneNormal;
-			rbody.AddForce(currentJumpVector*floatForce,ForceMode.Impulse);
+			rbody.AddForce( currentPlaneNormal.normalized *jumpForce, ForceMode.Force);
+		} else if(Input.GetKey("space")){
+			Vector3 currentJumpVector=currentPlaneNormal.normalized;
+			rbody.AddForce(currentJumpVector*floatForce,ForceMode.Force);
 		}
 
 
