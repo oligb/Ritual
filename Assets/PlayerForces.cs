@@ -51,6 +51,8 @@ public class PlayerForces : MonoBehaviour {
 		//rbody.AddForce(new Vector3(inputX*moveForce,0f,inputY*moveForce));
 
 
+		//wall logic
+
 		hitColliders = Physics.OverlapSphere(transform.position, raycastRadius);
 		if (hitColliders.Length>=2) {
 			onWall=true;
@@ -58,9 +60,12 @@ public class PlayerForces : MonoBehaviour {
 		else{
 			onWall=false;
 		}
+
+
 		if(onWall){
-			currentPlaneNormal=hitColliders[0].transform.up;
-			secretPlayer.transform.rotation = Quaternion.LookRotation(transform.forward,currentPlaneNormal);
+			currentPlane=hitColliders[0].gameObject;
+			currentPlaneNormal=currentPlane.transform.up;
+			secretPlayer.transform.rotation = Quaternion.LookRotation(currentPlane.transform.forward,currentPlaneNormal);
 			rbody.AddForce(-currentPlaneNormal*towardsWallForce);
 
 			Vector3 inputVector=new Vector3(inputX*moveForce,0f,inputY*moveForce);
