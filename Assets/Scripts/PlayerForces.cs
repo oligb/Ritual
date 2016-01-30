@@ -14,7 +14,11 @@ public class PlayerForces : MonoBehaviour {
 	public float maxVelocity = 50f;
 
 	public float raycastRadius=5f;
-	public GameObject currentPlane;
+
+	public float orientToPlaneLerpSpeed =.1f;
+	GameObject currentPlane;
+
+
 
 	public Vector3 currentPlaneNormal;
 	// Use this for initialization
@@ -53,8 +57,14 @@ public class PlayerForces : MonoBehaviour {
 
 		//wall logic
 
+
+
+
+
 		hitColliders = Physics.OverlapSphere(transform.position, raycastRadius);
+		Ray ray;
 		if (hitColliders.Length>=2) {
+			
 			onWall=true;
 		}
 		else{
@@ -63,9 +73,15 @@ public class PlayerForces : MonoBehaviour {
 
 
 		if(onWall){
+
 			currentPlane=hitColliders[0].gameObject;
-			currentPlaneNormal=currentPlane.transform.up;
-			secretPlayer.transform.rotation = Quaternion.LookRotation(currentPlane.transform.forward,currentPlaneNormal);
+			ray= new Ray(transform.position,currentPlane.transform.position-transform.position);
+			currentPlaneNormal= GetNormalFromRay(ray);
+			Debug.DrawRay(transform.position,currentPlaneNormal);
+
+			//currentPlaneNormal=currentPlane.transform.up;
+			Quaternion target = Quaternion.LookRotation(currentPlane.transform.forward,currentPlaneNormal);
+			secretPlayer.transform.rotation= Quaternion.Slerp(secretPlayer.transform.rotation,target,orientToPlaneLerpSpeed);
 			rbody.AddForce(-currentPlaneNormal*towardsWallForce);
 
 			Vector3 inputVector=new Vector3(inputX*moveForce,0f,inputY*moveForce);
@@ -73,7 +89,7 @@ public class PlayerForces : MonoBehaviour {
 			rbody.AddForce(direction);
 		}
 		else{
-			secretPlayer.transform.rotation=transform.rotation;
+		//	secretPlayer.transform.rotation=transform.rotation;
 			rbody.AddForce(new Vector3(inputX*moveForce,0f,forwardSpeed));
 		}
 
@@ -126,6 +142,32 @@ public class PlayerForces : MonoBehaviour {
 				
 			
 	}
+
+
+	public static Vector3 GetNormalFromRay( Ray ray ) {
+		RaycastHit hit = new RaycastHit();
+		if ( Physics.Raycast( ray, out hit) ) {
+			Debug.Log(hit.collider.gameObject.name);
+			MeshCollider meshCollider = hit.collider as MeshCollider;
+			Mesh mesh = meshCollider.sharedMesh;
+			Vector3[] vertices = mesh.vertices;
+			int[] triangles = mesh.triangles;
+			Vector3 p0 = vertices[triangles[hit.triangleIndex * 3 + 0]];
+			Vector3 p1 = vertices[triangles[hit.triangleIndex * 3 + 1]];
+			Vector3 p2 = vertices[triangles[hit.triangleIndex * 3 + 2]];
+			Transform hitTransform = hit.collider.transform;
+			p0 = hitTransform.TransformPoint(p0);
+			p1 = hitTransform.TransformPoint(p1);
+			p2 = hitTransform.TransformPoint(p2);
+			return Vector3.Cross( (p1 - p0), (p2 - p0) );
+		}
+		return Vector3.zero;
+	}
+
+
+
+
+
 
 	void OnDrawGizmosSelected() {
 		Gizmos.color = Color.yellow;
