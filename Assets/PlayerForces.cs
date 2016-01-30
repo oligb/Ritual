@@ -71,6 +71,7 @@ public class PlayerForces : MonoBehaviour {
 			onWall=false;
 		}
 
+		Quaternion target;
 
 		if(onWall){
 
@@ -80,7 +81,7 @@ public class PlayerForces : MonoBehaviour {
 			Debug.DrawRay(transform.position,currentPlaneNormal);
 
 			//currentPlaneNormal=currentPlane.transform.up;
-			Quaternion target = Quaternion.LookRotation(currentPlane.transform.forward,currentPlaneNormal);
+			target = Quaternion.LookRotation(currentPlane.transform.forward,currentPlaneNormal);
 			secretPlayer.transform.rotation= Quaternion.Slerp(secretPlayer.transform.rotation,target,orientToPlaneLerpSpeed);
 			rbody.AddForce(-currentPlaneNormal*towardsWallForce);
 
