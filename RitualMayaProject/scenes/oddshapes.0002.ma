@@ -1,6 +1,6 @@
 //Maya ASCII 2015 scene
 //Name: oddshapes.0002.ma
-//Last modified: Sat, Jan 30, 2016 12:49:53 PM
+//Last modified: Sat, Jan 30, 2016 01:16:02 PM
 //Codeset: UTF-8
 requires maya "2015";
 currentUnit -l centimeter -a degree -t film;
@@ -12,8 +12,8 @@ fileInfo "osv" "Mac OS X 10.9.5";
 fileInfo "license" "student";
 createNode transform -s -n "persp";
 	setAttr ".v" no;
-	setAttr ".t" -type "double3" 12.808474310324311 5.2773688869658049 -18.299761879283707 ;
-	setAttr ".r" -type "double3" -23.738352729573592 498.99999999994981 0 ;
+	setAttr ".t" -type "double3" 6.4589824417298836 14.431127896305966 14.146246015651323 ;
+	setAttr ".r" -type "double3" -42.338352729647035 740.99999999992338 -2.5551264180275354e-15 ;
 createNode camera -s -n "perspShape" -p "persp";
 	setAttr -k off ".v" no;
 	setAttr ".fl" 34.999999999999986;
@@ -65,6 +65,7 @@ createNode camera -s -n "sideShape" -p "side";
 	setAttr ".hc" -type "string" "viewSet -s %camera";
 	setAttr ".o" yes;
 createNode transform -n "pCube1";
+	setAttr ".r" -type "double3" -90 0 0 ;
 	setAttr ".rp" -type "double3" 1.399858459357159 0 -0.21838034576888088 ;
 	setAttr ".sp" -type "double3" 1.399858459357159 0 -0.21838034576888088 ;
 createNode mesh -n "pCubeShape1" -p "pCube1";
