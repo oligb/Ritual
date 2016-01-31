@@ -545,7 +545,8 @@ MonoBehaviour:
   pathRegenTimeout: 5
   pathGeneratorPrefab: {fileID: 11465868, guid: 490bed8c501d64aed8669d91f45a1ebd,
     type: 2}
-  distanceForNewPath: {x: 0, y: -100, z: 100}
+  newPathFloorPrefab: {fileID: 157408, guid: 6c98997d5e6d84f2f896b0c25e69ca7f, type: 2}
+  distanceForNewPath: {x: 0, y: -20, z: 20}
   leadingCurves: 20
   trailingCurves: 4
   player: {fileID: 1082941063}

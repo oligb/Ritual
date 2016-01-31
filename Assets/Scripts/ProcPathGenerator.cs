@@ -50,7 +50,16 @@ public class ProcPathGenerator : MonoBehaviour {
 	void Start () {
         segments = new List<Segment>();
         activePath = false;
+        StartCoroutine( StartDelay() );
         
+	}
+    
+    void Update() {
+        
+    }
+    
+    IEnumerator StartDelay() {
+        yield return null;
         Vector3 firstPoint = transform.position + transform.rotation * Vector3.forward * -pointDistance;
         points.Add( firstPoint );
         
@@ -59,10 +68,6 @@ public class ProcPathGenerator : MonoBehaviour {
         
         StartCoroutine( MaintainLeadingCurves() );
         StartCoroutine( PathRegenCheck() );
-	}
-    
-    void Update() {
-        
     }
     
     IEnumerator MaintainLeadingCurves() {
@@ -156,6 +161,7 @@ public class ProcPathGenerator : MonoBehaviour {
             Vector3 displacement = segments[currentPlayerSegment].transform.position - player.transform.position;
             if( displacement.magnitude > distanceLeftPath ) {
                 Debug.Log( "Player left track from segment " + currentPlayerSegment );
+                // StartCoroutine( PlayerLeftTrack() );
                 PlayerLeftTrack();
             }
             yield return null;
@@ -163,7 +169,7 @@ public class ProcPathGenerator : MonoBehaviour {
     }
     
     void PlayerLeftTrack() {
-        
+        activePath = false;
         helperObject.position = player.transform.position;
         helperObject.rotation = Quaternion.identity;
         helperObject.Translate(0, -10f, 0, Space.World);
@@ -175,15 +181,18 @@ public class ProcPathGenerator : MonoBehaviour {
         
         helperObject.position = player.transform.position;
         Vector3 displacement = player.transform.position - Camera.main.transform.position;
-        helperObject.rotation = Quaternion.LookRotation( displacement.normalized, Vector3.up );
+        // helperObject.rotation = Quaternion.LookRotation( displacement.normalized, Vector3.up );
+        helperObject.rotation = Quaternion.identity;
         helperObject.Translate( distanceForNewPath, Space.Self );
+        Vector3 position = helperObject.position;
+        Quaternion rotation = helperObject.rotation;
         GameObject newPathGO = Instantiate (
-            pathGeneratorPrefab,
-            helperObject.position,
-            helperObject.rotation
+            pathGeneratorPrefab.gameObject,
+            position,
+            rotation
         ) as GameObject;
         
-        
+        Debug.Log("New path: " + newPathGO + "???");
         ProcPathGenerator newPath = newPathGO.GetComponent<ProcPathGenerator>();
         newPath.points = new List<Vector3>();
         newPath.currentAngling = new Vector2();

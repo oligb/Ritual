@@ -42,7 +42,8 @@ MonoBehaviour:
   distanceLeftPath: 200
   pathRegenTimeout: 5
   pathGeneratorPrefab: {fileID: 11465868}
-  distanceForNewPath: {x: 0, y: -100, z: 100}
+  newPathFloorPrefab: {fileID: 157408, guid: 6c98997d5e6d84f2f896b0c25e69ca7f, type: 2}
+  distanceForNewPath: {x: 0, y: -20, z: 20}
   leadingCurves: 20
   trailingCurves: 4
   player: {fileID: 0}
@@ -73,7 +74,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: distanceForNewPath.y
-      value: -100
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: newPathFloorPrefab
+      value: 
+      objectReference: {fileID: 157408, guid: 6c98997d5e6d84f2f896b0c25e69ca7f, type: 2}
+    - target: {fileID: 0}
+      propertyPath: distanceForNewPath.z
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

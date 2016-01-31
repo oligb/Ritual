@@ -6,6 +6,7 @@ public class Segment : MonoBehaviour {
     
     public float baseLength;
     public int numberOfPiecesToChoose = 2;
+    public float chanceOfSphereGuy;
     [HideInInspector]
     public ProcPathGenerator parentPath;
     [HideInInspector]
@@ -13,7 +14,7 @@ public class Segment : MonoBehaviour {
     public List<GameObject> leftPieces;
     public List<GameObject> rightPieces; 
     public List<GameObject> roofPieces;
-    public List<GameObject> coins;
+    public GameObject sphereGuy;
 
 	// Use this for initialization
 	void Start () {
@@ -31,6 +32,10 @@ public class Segment : MonoBehaviour {
             } else {
                 rightPieces[ index - leftPieces.Count ].SetActive(true);
             }
+        }
+        float seed = Random.value;
+        if( seed < chanceOfSphereGuy ) {
+            sphereGuy.SetActive(true);
         }
 	}
 	
@@ -53,9 +58,6 @@ public class Segment : MonoBehaviour {
             obj.SetActive(false);
         }
         foreach( GameObject obj in roofPieces ) {
-            obj.SetActive(false);
-        }
-        foreach( GameObject obj in coins ) {
             obj.SetActive(false);
         }
     }
