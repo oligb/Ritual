@@ -96,9 +96,10 @@ public class PlayerForces : MonoBehaviour {
 		//	secretPlayer.transform.rotation=transform.rotation;
 		//	rbody.AddRelativeForce(new Vector3(inputX*moveForce,0f,forwardSpeed));
 
-			Vector3 inputVector=new Vector3(inputX*moveForce,0f,inputY*moveForce);
-			Vector3 direction =secretPlayer.transform.rotation * inputVector;
-			rbody.AddForce(direction);
+			Vector3 inputVector=new Vector3(inputX*moveForce,0f,0f);
+			//Vector3 direction =secretPlayer.transform.rotation * inputVector;
+
+			rbody.AddForce(inputVector);
 		}
 
 
@@ -110,14 +111,12 @@ public class PlayerForces : MonoBehaviour {
 		if(onWall && Input.GetKeyDown("space")){
 			rbody.AddForce(currentPlaneNormal*jumpForce,ForceMode.Impulse);
 		}
-		/*
+
 		if(Input.GetKey("space")){
 			Vector3 currentJumpVector=currentPlaneNormal;
 			rbody.AddForce(currentJumpVector*floatForce);
 		}
 
-
-*/
 
 		//forward accell
 

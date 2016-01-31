@@ -11,21 +11,19 @@ public class OrientCamera : MonoBehaviour {
 	void Start () {
 		playerScript=parent.gameObject.GetComponent<PlayerForces>();
 
-		StartCoroutine("CamOrient");
+		//StartCoroutine("CamOrient");
 	}
 	
 	// Update is called once per frame
-	IEnumerator CamOrient () {
+	void Update () {
 
-		while(true){
-		lerpSpeed=playerScript.velocity.Remap(0f,playerScript.maxVelocity,.5f,0f);
+		lerpSpeed=playerScript.velocity.Remap(0f,playerScript.maxVelocity,.8f,0f);
 			currentPlaneDir=playerScript.currentPlaneNormal;
 
 		Quaternion target = Quaternion.LookRotation(-currentPlaneDir,Vector3.up);
 		Quaternion parentForward = Quaternion.LookRotation(parent.transform.forward,Vector3.up);
 		transform.rotation=Quaternion.Slerp(parentForward,target,lerpSpeed);
-			yield return null;
-		}
+
 
 		//ta
 		/*rget=Quaternion.LookRotation(rbody.velocity.normalized,currentPlaneNormal);

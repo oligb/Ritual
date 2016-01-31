@@ -12,19 +12,16 @@ public class MoveCamera : MonoBehaviour {
 	void Start () {
 		player=GameObject.Find("player").transform;
 		target=GameObject.Find("CamTarget").transform;
-		StartCoroutine("CamMove");
 	}
 	
 	// Update is called once per frame
-	IEnumerator CamMove () {
+	void FixedUpdate () {
 
-		while(true){
 		transform.position=Vector3.Lerp(transform.position,target.position,lerpMoveSpeed);
 		Vector3 lerpedTarget=Vector3.Lerp(playerLerpPos,player.position,lerpLookSpeed);
-	//	transform.LookAt(lerpedTarget);
+		transform.LookAt(lerpedTarget);
 
 		playerLerpPos=player.position;
-			yield return null;
-		}
+
 	}
 }
