@@ -16,7 +16,7 @@ public class PlayerForces : MonoBehaviour {
 	public float raycastRadius=5f;
 
 	public float orientToPlaneLerpSpeed =.1f;
-	GameObject currentPlane;
+	public GameObject currentPlane;
 
 
 
@@ -62,6 +62,7 @@ public class PlayerForces : MonoBehaviour {
 
 
 		hitColliders = Physics.OverlapSphere(transform.position, raycastRadius);
+		currentPlane=hitColliders[0].gameObject;
 		Ray ray;
 		if (hitColliders.Length>=2) {
 			
@@ -75,13 +76,15 @@ public class PlayerForces : MonoBehaviour {
 
 		if(onWall){
 
-			currentPlane=hitColliders[0].gameObject;
+
 			ray= new Ray(transform.position,currentPlane.transform.position-transform.position);
-			currentPlaneNormal= GetNormalFromRay(ray).normalized;
+			//currentPlaneNormal= GetNormalFromRay(ray).normalized;
 			Debug.DrawRay(transform.position,currentPlaneNormal);
 
-			//currentPlaneNormal=currentPlane.transform.up;
+			currentPlaneNormal=currentPlane.transform.up;
 			target = Quaternion.LookRotation(currentPlane.transform.forward,currentPlaneNormal);
+
+			//target=Quaternion.LookRotation(rbody.velocity.normalized,currentPlaneNormal);
 			secretPlayer.transform.rotation= Quaternion.Slerp(secretPlayer.transform.rotation,target,orientToPlaneLerpSpeed);
 			rbody.AddForce(-currentPlaneNormal*towardsWallForce);
 
@@ -91,7 +94,11 @@ public class PlayerForces : MonoBehaviour {
 		}
 		else{
 		//	secretPlayer.transform.rotation=transform.rotation;
-			rbody.AddForce(new Vector3(inputX*moveForce,0f,forwardSpeed));
+		//	rbody.AddRelativeForce(new Vector3(inputX*moveForce,0f,forwardSpeed));
+
+			Vector3 inputVector=new Vector3(inputX*moveForce,0f,inputY*moveForce);
+			Vector3 direction =secretPlayer.transform.rotation * inputVector;
+			rbody.AddForce(direction);
 		}
 
 
@@ -141,8 +148,16 @@ public class PlayerForces : MonoBehaviour {
 
 
 				
-			
+		velocity=rbody.velocity.magnitude;
 	}
+
+	public void SecretPlayerCollision(Collision col){
+		currentPlane=col.gameObject;
+			Ray ray = new Ray(transform.position,col.contacts[0].point-transform.position);
+			currentPlaneNormal=GetNormalFromRay(ray).normalized;
+
+	}
+
 
 
 	public static Vector3 GetNormalFromRay( Ray ray ) {
