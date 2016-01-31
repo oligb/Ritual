@@ -145,7 +145,7 @@ public class PlayerForces : MonoBehaviour {
 
 
 		//jumps
-		if(onWall && Input.GetKeyDown("space")){
+		if(onWall && Input.GetKeyDown(KeyCode.JoystickButton16) || onWall && Input.GetKeyDown("space")){
 			
 			StartCoroutine("PitchUp");
 		//	Invoke("ToggleLanded",.3f);
