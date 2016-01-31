@@ -15,25 +15,47 @@ public class SplineGenerator : MonoBehaviour {
     
     [SerializeField]
     private List<Vector3> points = new List<Vector3>();
+    private List<Vector3> evaluatedPoints = new List<Vector3>();
     private List<BezierControlPointMode> modes = new List<BezierControlPointMode>();
     private bool loop;
+    
+    void OnDrawGizmos() {
+        for( int i = 0; i < evaluatedPoints.Count; i++ ) {
+            // if( i % 3 != 0 ) {
+                Gizmos.DrawWireSphere( evaluatedPoints[i], 1);
+                if( i > 0) {
+                    Gizmos.DrawLine( evaluatedPoints[ i - 1], evaluatedPoints[ i ]);
+                }
+            // }
+        }
+    }
 
 	// Use this for initialization
 	void Start () {
+        // evaluatedPoints.Add( transform.position );
         for( int i = 0; i < curves; i++) {
-            Debug.Log("Starting curve #" + i);
+            // Debug.Log("Starting curve #" + i);
             GenerateNewCurveSegment();
             PlaceSegments();
         }
+        GetComponent<LineRenderer>().SetPositions( evaluatedPoints.ToArray() );
 	}
     
     public void GenerateNewCurveSegment() {
+        Vector3 velocity = transform.forward;;
+        if( points.Count != 0 ) {
+            velocity = GetVelocity( 0 );
+        }
+            
         for( int i = 0; i < 4; i++ ) {
             if( points.Count == 0) {
                 Vector3 firstPoint = Random.onUnitSphere * radius;
                 points.Add( firstPoint );
             } else {
                 Vector3 newPoint = points[ points.Count - 1] + Random.insideUnitSphere * radius;
+                
+                // newPoint = Vector3.RotateTowards() (newPoint, velocity);
+                
                 points.Add( newPoint );
             }
         }
@@ -42,17 +64,30 @@ public class SplineGenerator : MonoBehaviour {
     }
     
     public void PlaceSegments() {
-        for( int i = 0; i < segmentsPerCurve; i++ ) {
+        for( int i = 1; i <= segmentsPerCurve; i++ ) {
             float t =  ( i * 1.0f ) / segmentsPerCurve;
             Vector3 center = GetPoint( t );
+            evaluatedPoints.Add( center );
+            
             Vector3 velocity = GetVelocity( t );
             // Debug.Log( "Time " + t + ", center " + center + ", velocity" + velocity );
-            GameObject newSegment = Instantiate( curveSegmentPrefab, center, Quaternion.LookRotation( velocity.normalized, transform.up ) ) as GameObject;
-            Vector3 segmentPosition = Random.onUnitSphere * radiusFromCurve;
+            
+            GameObject newSegment = Instantiate( curveSegmentPrefab, center, Quaternion.LookRotation( velocity.normalized, transform.up )  ) as GameObject;
+            Vector3 segmentPosition = new Vector3( radiusFromCurve, 0, 0);
             segmentPosition.z = 0;
             newSegment.transform.Translate( segmentPosition, Space.Self );
-            newSegment.transform.LookAt( center );
-            newSegment.transform.rotation *= Quaternion.Euler( Vector3.right * 90f);
+            
+            Vector3 newEuler = newSegment.transform.eulerAngles;
+            newEuler.x = velocity.x;
+            newEuler.y = velocity.y;
+            
+            Vector3 displacement = newSegment.transform.position - center;
+            newEuler.z = displacement.normalized.z;
+            newSegment.transform.eulerAngles = newEuler;
+            
+            // newSegment.transform.LookAt( center );
+            // newSegment.transform.Rotate(90, 0, 90, Space.Self);
+            // newSegment.transform.rotation *= Quaternion.Euler( newSegment.transform.forward * 90f);
         }
     }
     
