@@ -20,13 +20,14 @@ public class PickupScript : MonoBehaviour {
 
 
 
-	void OnTriggerEnter(){
-		
+	void OnTriggerEnter( Collider col){
+		if(col.tag=="Player"){
 	Destroy(GetComponent<SphereCollider>());
 	target= otherTrailsObj.GetComponent<AssignPickup>().Assign();
 		otherTrailsObj.GetComponentInParent<TriggerPickup>().Pickup();
 
 	StartCoroutine("Collected");
+		}
 }
 
 

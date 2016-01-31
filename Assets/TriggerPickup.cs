@@ -14,7 +14,8 @@ public class TriggerPickup : MonoBehaviour {
 		if(currentTex>ramps.Length){
 			currentTex=0;
 		}
-		Camera.main.GetComponent<CC_GradientRamp>().rampTexture=ramps[currentTex];
+
+		Camera.main.GetComponent<CC_GradientRamp>().rampTexture=ramps[currentTex-1];
 
 
 	}

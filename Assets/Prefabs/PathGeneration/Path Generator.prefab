@@ -39,7 +39,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dfefb2da3fcd40ed8f5a28bd97edb87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceLeftPath: 200
+  distanceLeftPath: 400
   pathRegenTimeout: 5
   pathGeneratorPrefab: {fileID: 11465868}
   newPathFloorPrefab: {fileID: 157408, guid: 6c98997d5e6d84f2f896b0c25e69ca7f, type: 2}
@@ -48,12 +48,12 @@ MonoBehaviour:
   trailingCurves: 4
   player: {fileID: 0}
   curveSegmentPrefab:
-  - {fileID: 123026, guid: 50dff29435ca3447984cb19109fc788f, type: 2}
-  pointDistance: 160
-  pointRadius: 20
-  segmentsPerCurve: 1
-  maxAngle: {x: 0, y: 0}
-  minAngle: {x: -4, y: 0}
+  - {fileID: 180748, guid: 26ecdbbb5d43d41af8d128c6532d5d31, type: 2}
+  pointDistance: 200
+  pointRadius: 50
+  segmentsPerCurve: 2
+  maxAngle: {x: 1, y: 0.3}
+  minAngle: {x: -1, y: -0.5}
   points: []
   currentAngling: {x: 0, y: 0}
   helperObject: {fileID: 0}
