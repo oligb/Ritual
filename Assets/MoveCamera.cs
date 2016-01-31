@@ -10,6 +10,7 @@ public class MoveCamera : MonoBehaviour {
 	public Transform player;
 	public PlayerForces script;
 	Vector3 playerLerpPos;
+	public float extraFixVelocityBuffer=15f;
 
 	void Start () {
 		player=GameObject.Find("player").transform;
@@ -20,12 +21,15 @@ public class MoveCamera : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 
-		lerpMoveSpeed=script.velocity.Remap(0f,script.maxVelocity,.3f,.05f);
+		lerpMoveSpeed=script.velocity.Remap(0f,script.maxVelocity+extraFixVelocityBuffer,.3f,.05f);
 		transform.position=Vector3.Lerp(transform.position,target.position,lerpMoveSpeed);
 		Vector3 lerpedTarget=Vector3.Lerp(playerLerpPos,player.position,lerpLookSpeed);
 		transform.LookAt(lerpedTarget);
 
+
 		playerLerpPos=player.position;
+
+
 
 	}
 }

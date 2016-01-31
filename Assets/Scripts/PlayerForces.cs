@@ -41,6 +41,7 @@ public class PlayerForces : MonoBehaviour {
 
 
 	public float pitchUpTime=1f;
+	public float volumeFaloffSpeed=.01f;
 	public AudioSource source;
 	// in my start function... set enemy layer
 
@@ -99,6 +100,7 @@ public class PlayerForces : MonoBehaviour {
 		Quaternion target;
 
 		if(onWall){
+			source.volume+=volumeFaloffSpeed*3f;
 			if(!landed){
 				source.Play();
 				landed=true;
@@ -125,6 +127,7 @@ public class PlayerForces : MonoBehaviour {
 			//source.Play();
 		}
 		else{
+			source.volume-=volumeFaloffSpeed;
 			//source.Stop();
 
 			//source.time=0f;
@@ -161,7 +164,16 @@ public class PlayerForces : MonoBehaviour {
 
 		//forward accell
 
+		if(rbody.velocity.magnitude<=maxVelocity){
 
+		rbody.AddRelativeForce(inputY*Vector3.forward*accelScaler);
+		}
+		else{
+			rbody.AddRelativeForce(inputY*Vector3.back*accelScaler*2f);
+		}
+
+
+		/*
 		float maxSpeedAttained=0f;
 
 		if(Input.GetKey(KeyCode.W)){
@@ -189,6 +201,7 @@ public class PlayerForces : MonoBehaviour {
 
 				
 		velocity=rbody.velocity.magnitude;
+
 
 		extraSecretPlayer.transform.rotation=Quaternion.LookRotation(rbody.velocity.normalized);
 	}

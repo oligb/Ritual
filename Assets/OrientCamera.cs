@@ -17,7 +17,7 @@ public class OrientCamera : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		lerpSpeed=playerScript.velocity.Remap(0f,playerScript.maxVelocity,.8f,0f);
+		lerpSpeed=playerScript.velocity.Remap(0f,playerScript.maxVelocity,.5f,.2f);
 			currentPlaneDir=playerScript.currentPlaneNormal;
 
 		Quaternion target = Quaternion.LookRotation(-currentPlaneDir,Vector3.up);
