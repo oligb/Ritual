@@ -107,9 +107,7 @@ public class PlayerForces : MonoBehaviour {
 			}
 
 
-			ray= new Ray(transform.position,currentPlane.transform.position-transform.position);
-			//currentPlaneNormal= GetNormalFromRay(ray).normalized;
-			Debug.DrawRay(transform.position,currentPlaneNormal);
+			//ray= new Ray(transform.position,currentPlane.transform.position-transform.position);
 
 			currentPlaneNormal=currentPlane.transform.up;
 			target = Quaternion.LookRotation(currentPlane.transform.forward,currentPlaneNormal);
@@ -169,7 +167,8 @@ public class PlayerForces : MonoBehaviour {
 		rbody.AddRelativeForce(inputY*Vector3.forward*accelScaler);
 		}
 		else{
-			rbody.AddRelativeForce(inputY*Vector3.back*accelScaler*2f);
+			rbody.velocity=rbody.velocity.normalized*maxVelocity;
+	//		rbody.AddRelativeForce(inputY*Vector3.back*accelScaler*2f);
 		}
 
 
