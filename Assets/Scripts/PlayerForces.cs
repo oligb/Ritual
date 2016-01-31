@@ -24,10 +24,12 @@ public class PlayerForces : MonoBehaviour {
 	// Use this for initialization
 	public int wallsLayer;
 	public bool onWall=false;
+	public bool landed=false;
 	public Collider[] hitColliders;
 
 	public Rigidbody rbody;
 	GameObject secretPlayer;
+	GameObject extraSecretPlayer;
 
 	public AnimationCurve speedCurve;
 	public float speedUpTime;
@@ -36,14 +38,36 @@ public class PlayerForces : MonoBehaviour {
 	public float accelScaler=5f;
 
 	public float lerpSlowSpeed=.1f;
+
+
+	public float pitchUpTime=1f;
+	public AudioSource source;
 	// in my start function... set enemy layer
 
 	void Start () {
+		source=GetComponent<AudioSource>();
 		secretPlayer=transform.GetChild(0).gameObject;
+		extraSecretPlayer=GameObject.Find("visualPlayer");
 		rbody=GetComponent<Rigidbody>();
 		wallsLayer = 1 << LayerMask.NameToLayer("Walls");
 	}
-	
+
+
+	void OnCollisionEnter(Collision col){
+		GameObject planeInQuestion=col.gameObject;
+		foreach( Collider collider in hitColliders){
+			if(collider.gameObject != currentPlane && collider.gameObject !=gameObject){
+				currentPlane=collider.gameObject;
+				StopCoroutine("PitchUp");
+				StartCoroutine("PitchDown");
+				//source.pitch=1f;
+				//source.time=0f;
+				//source.Play();
+			}
+
+		}
+	}
+
 	// Update is called once per frame
 	void FixedUpdate () {
 
@@ -62,7 +86,7 @@ public class PlayerForces : MonoBehaviour {
 
 
 		hitColliders = Physics.OverlapSphere(transform.position, raycastRadius);
-		currentPlane=hitColliders[0].gameObject;
+		//currentPlane=hitColliders[0].gameObject;
 		Ray ray;
 		if (hitColliders.Length>=2) {
 			
@@ -75,6 +99,10 @@ public class PlayerForces : MonoBehaviour {
 		Quaternion target;
 
 		if(onWall){
+			if(!landed){
+				source.Play();
+				landed=true;
+			}
 
 
 			ray= new Ray(transform.position,currentPlane.transform.position-transform.position);
@@ -91,11 +119,19 @@ public class PlayerForces : MonoBehaviour {
 			Vector3 inputVector=new Vector3(inputX*moveForce,0f,inputY*moveForce);
 			Vector3 direction =secretPlayer.transform.rotation * inputVector;
 			rbody.AddForce(direction);
+
+	//		float randoStartTime=Random.Range(0f,source.clip.length-10f);
+
+			//source.Play();
 		}
 		else{
+			//source.Stop();
+
+			//source.time=0f;
 		//	secretPlayer.transform.rotation=transform.rotation;
 		//	rbody.AddRelativeForce(new Vector3(inputX*moveForce,0f,forwardSpeed));
 
+			secretPlayer.transform.rotation=Quaternion.LookRotation(rbody.velocity.normalized);
 			Vector3 inputVector=new Vector3(inputX*moveForce,0f,0f);
 			//Vector3 direction =secretPlayer.transform.rotation * inputVector;
 
@@ -109,6 +145,11 @@ public class PlayerForces : MonoBehaviour {
 
 		//jumps
 		if(onWall && Input.GetKeyDown("space")){
+			
+			StartCoroutine("PitchUp");
+		//	Invoke("ToggleLanded",.3f);
+			//source.time=0f;
+			//source.Stop();
 			rbody.AddForce(currentPlaneNormal*jumpForce,ForceMode.Impulse);
 		}
 
@@ -148,6 +189,36 @@ public class PlayerForces : MonoBehaviour {
 
 				
 		velocity=rbody.velocity.magnitude;
+
+		extraSecretPlayer.transform.rotation=Quaternion.LookRotation(rbody.velocity.normalized);
+	}
+
+	IEnumerator PitchUp(){
+		float startPitch=source.pitch;
+		float i=0f;
+
+		while (i<=1f){
+			source.pitch=i.Remap(0f,1f,startPitch,1.5f);
+			i+=Time.deltaTime/pitchUpTime;
+			yield return null;
+		}
+
+	}
+	IEnumerator PitchDown(){
+		float startPitch=source.pitch;
+		float i=0f;
+
+		while (i<=1f){
+			source.pitch=i.Remap(0f,1f,startPitch,.9f);
+			i+=Time.deltaTime/pitchUpTime;
+			yield return null;
+		}
+
+	}
+
+	public void ToggleLanded(){
+
+		landed=false;
 	}
 
 	public void SecretPlayerCollision(Collision col){
