@@ -21,6 +21,7 @@ public class OrientCamera : MonoBehaviour {
 			currentPlaneDir=playerScript.currentPlaneNormal;
 
 		Quaternion target = Quaternion.LookRotation(-currentPlaneDir,Vector3.up);
+        // Quaternion target = Quaternion.identity;
 		Quaternion parentForward = Quaternion.LookRotation(parent.transform.forward,Vector3.up);
 		transform.rotation=Quaternion.Slerp(parentForward,target,lerpSpeed);
 

@@ -39,13 +39,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dfefb2da3fcd40ed8f5a28bd97edb87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distanceLeftPath: 200
+  pathRegenTimeout: 5
+  pathGeneratorPrefab: {fileID: 11465868}
+  newPathFloorPrefab: {fileID: 157408, guid: 6c98997d5e6d84f2f896b0c25e69ca7f, type: 2}
+  distanceForNewPath: {x: 0, y: -20, z: 20}
+  leadingCurves: 20
+  trailingCurves: 4
+  player: {fileID: 0}
   curveSegmentPrefab:
   - {fileID: 123026, guid: 50dff29435ca3447984cb19109fc788f, type: 2}
-  pointDistance: 90
+  pointDistance: 160
   pointRadius: 20
   segmentsPerCurve: 1
-  leadingCurves: 10
+  maxAngle: {x: 0, y: 0}
+  minAngle: {x: -4, y: 0}
   points: []
+  currentAngling: {x: 0, y: 0}
   helperObject: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
@@ -53,7 +63,27 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: distanceLeftPath
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: pathRegenTimeout
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: distanceForNewPath.y
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: newPathFloorPrefab
+      value: 
+      objectReference: {fileID: 157408, guid: 6c98997d5e6d84f2f896b0c25e69ca7f, type: 2}
+    - target: {fileID: 0}
+      propertyPath: distanceForNewPath.z
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 110010}
