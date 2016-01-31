@@ -5,27 +5,26 @@ using System.Collections.Generic;
 public class ProcPathGenerator : MonoBehaviour {
     
     [HeaderAttribute("Setup")]
-    public GameObject curveSegmentPrefab;
+    public List<GameObject> curveSegmentPrefab;
     public float pointDistance;
     public float pointRadius;
     public int segmentsPerCurve;
-    public float radiusFromCurve;
-    public BezierControlPointMode preferedMode;
     [HeaderAttribute("Starting Generation")]
     
     public int leadingCurves;
     
     [SerializeField]
     private List<Vector3> points = new List<Vector3>();
-    private List<Vector3> evaluatedPoints = new List<Vector3>();
     private bool makingNewCurves;
     private bool isMakingCurve;
+    [SerializeField]
+    private Transform helperObject;
     
     void OnDrawGizmos() {
-        for( int i = 0; i < evaluatedPoints.Count; i++ ) {
-            Gizmos.DrawWireSphere( evaluatedPoints[i], 1);
+        for( int i = 0; i < points.Count; i++ ) {
+            Gizmos.DrawWireSphere( points[i], 1);
             if( i > 0) {
-                Gizmos.DrawLine( evaluatedPoints[ i - 1], evaluatedPoints[ i ]);
+                Gizmos.DrawLine( points[ i - 1], points[ i ]);
             }
         }
     }
@@ -33,89 +32,62 @@ public class ProcPathGenerator : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         makingNewCurves = true;
+        
+        Vector3 firstPoint = transform.position + transform.rotation * Vector3.forward * -pointDistance;
+        points.Add( firstPoint );
+        
         points.Add( transform.position );
-        Vector3 secondPoint = transform.position;
-        secondPoint.z += pointDistance;
-        points.Add( secondPoint );
-        // evaluatedPoints.Add( transform.position );
-        for( int i = 0; i < curves; i++) {
-            // Debug.Log("Starting curve #" + i);
-            GenerateNewCurveSegment();
-            PlaceSegments();
-        }
-        GetComponent<LineRenderer>().SetPositions( evaluatedPoints.ToArray() );
+        
+        StartCoroutine( MaintainLeadingCurves() );
 	}
     
     IEnumerator MaintainLeadingCurves() {
         while( makingNewCurves ) {
             if( points.Count - 1 < leadingCurves ) {
-                StartCoroutine( BuildNewSegment() );
+                
+                BuildNewSegment();
                 GenerateNextPoint();
-                if( isMakingCurve ) {
-                    yield return null;
+            } else {
+                yield return null;
             } 
         }
-                }
     }
     
     void GenerateNextPoint() {
+        
+        // Choose point from last direction
         Vector3 prevDifference = points[points.Count - 1] - points[points.Count - 2];
         Vector3 newPoint = prevDifference.normalized * pointDistance + points[points.Count - 1];
-    }
-    
-    IEnumerator BuildNewSegment() {
         
+        // Choose direciton
+        Vector3 offset = Random.onUnitSphere * pointRadius;
+        offset.z = 0;
+        
+        // Implement direction
+        helperObject.position = points[points.Count - 1];
+        helperObject.LookAt(newPoint, transform.up);
+        helperObject.position = newPoint;
+        helperObject.Translate( offset, Space.Self);
+        points.Add( helperObject.position );
     }
     
-    public void GenerateNewCurveSegment() {
-        Vector3 velocity = transform.forward;;
-        if( points.Count != 0 ) {
-            velocity = GetVelocity( 0 );
-        }
-            
-        for( int i = 0; i < 4; i++ ) {
-            if( points.Count == 0) {
-                Vector3 firstPoint = Random.onUnitSphere * radius;
-                points.Add( firstPoint );
-            } else {
-                Vector3 newPoint = points[ points.Count - 1] + Random.insideUnitSphere * radius;
-                
-                // newPoint = Vector3.RotateTowards() (newPoint, velocity);
-                
-                points.Add( newPoint );
-            }
-        }
-        modes.Add( preferedMode );
-        EnforceMode(points.Count - 4 );
+    void BuildNewSegment() {
+        
+        // Choose angle
+        Vector3 angle = points[points.Count - 1] - points[points.Count - 2];
+        
+        // Choose prefab
+        int randomPrefab = Random.Range(0, curveSegmentPrefab.Count );
+        GameObject newSegment = Instantiate(
+          curveSegmentPrefab[randomPrefab],
+          points[points.Count - 1],
+          Quaternion.LookRotation(angle.normalized, transform.up)  
+        ) as GameObject;
+        newSegment.BroadcastMessage("AssembleSegment", pointDistance);
+        
+        // delay between making curves
     }
     
-    public void PlaceSegments() {
-        for( int i = 1; i <= segmentsPerCurve; i++ ) {
-            float t =  ( i * 1.0f ) / segmentsPerCurve;
-            Vector3 center = GetPoint( t );
-            evaluatedPoints.Add( center );
-            
-            Vector3 velocity = GetVelocity( t );
-            // Debug.Log( "Time " + t + ", center " + center + ", velocity" + velocity );
-            
-            GameObject newSegment = Instantiate( curveSegmentPrefab, center, Quaternion.LookRotation( velocity.normalized, transform.up )  ) as GameObject;
-            Vector3 segmentPosition = new Vector3( radiusFromCurve, 0, 0);
-            segmentPosition.z = 0;
-            newSegment.transform.Translate( segmentPosition, Space.Self );
-            
-            Vector3 newEuler = newSegment.transform.eulerAngles;
-            newEuler.x = velocity.x;
-            newEuler.y = velocity.y;
-            
-            Vector3 displacement = newSegment.transform.position - center;
-            newEuler.z = displacement.normalized.z;
-            newSegment.transform.eulerAngles = newEuler;
-            
-            // newSegment.transform.LookAt( center );
-            // newSegment.transform.Rotate(90, 0, 90, Space.Self);
-            // newSegment.transform.rotation *= Quaternion.Euler( newSegment.transform.forward * 90f);
-        }
-    }
     
     
 }
