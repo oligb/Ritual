@@ -9,6 +9,8 @@ public class ProcPathGenerator : MonoBehaviour {
     public float pointDistance;
     public float pointRadius;
     public int segmentsPerCurve;
+    public Vector2 maxAngle;
+    public Vector2 minAngle;
     [HeaderAttribute("Starting Generation")]
     
     public int leadingCurves;
@@ -17,6 +19,8 @@ public class ProcPathGenerator : MonoBehaviour {
     private List<Vector3> points = new List<Vector3>();
     private bool makingNewCurves;
     private bool isMakingCurve;
+    [SerializeField]
+    private Vector2 currentAngling;
     [SerializeField]
     private Transform helperObject;
     
@@ -47,6 +51,7 @@ public class ProcPathGenerator : MonoBehaviour {
                 
                 BuildNewSegment();
                 GenerateNextPoint();
+                yield return null;
             } else {
                 yield return null;
             } 
@@ -60,8 +65,28 @@ public class ProcPathGenerator : MonoBehaviour {
         Vector3 newPoint = prevDifference.normalized * pointDistance + points[points.Count - 1];
         
         // Choose direciton
-        Vector3 offset = Random.onUnitSphere * pointRadius;
-        offset.z = 0;
+        Vector3 offset = Random.onUnitSphere;
+        currentAngling.x += offset.x;
+        currentAngling.y += offset.y;
+        
+        // Only correct direciton if direction correction is permitted
+        if( maxAngle.x != minAngle.x ) {
+            if( currentAngling.x > maxAngle.x ) {
+                currentAngling.x = maxAngle.x;
+            } else if( currentAngling.x < minAngle.x ) {
+                currentAngling.x = minAngle.x;
+            }
+        }
+        if( maxAngle.y != minAngle.y ) {
+            if( currentAngling.y > maxAngle.y ) {
+                currentAngling.y = maxAngle.y;
+            } else if( currentAngling.y < minAngle.y ) {
+                currentAngling.y = minAngle.y;
+            }
+        }
+        
+        offset *= pointRadius;
+        offset.z = 0; 
         
         // Implement direction
         helperObject.position = points[points.Count - 1];
