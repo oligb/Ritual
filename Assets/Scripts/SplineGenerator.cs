@@ -8,6 +8,7 @@ public class SplineGenerator : MonoBehaviour {
     public GameObject curveSegmentPrefab;
     public float radius;
     public int segmentsPerCurve;
+    public float radiusFromCurve;
     public BezierControlPointMode preferedMode;
     [HeaderAttribute("Starting Generation")]
     public int curves;
@@ -29,7 +30,7 @@ public class SplineGenerator : MonoBehaviour {
     public void GenerateNewCurveSegment() {
         for( int i = 0; i < 4; i++ ) {
             if( points.Count == 0) {
-                Vector3 firstPoint = Random.insideUnitSphere * radius;
+                Vector3 firstPoint = Random.onUnitSphere * radius;
                 points.Add( firstPoint );
             } else {
                 Vector3 newPoint = points[ points.Count - 1] + Random.insideUnitSphere * radius;
@@ -45,8 +46,13 @@ public class SplineGenerator : MonoBehaviour {
             float t =  ( i * 1.0f ) / segmentsPerCurve;
             Vector3 center = GetPoint( t );
             Vector3 velocity = GetVelocity( t );
-            Debug.Log( "Time " + t + ", center " + center + ", velocity" + velocity );
-            Instantiate( curveSegmentPrefab, center, Quaternion.Euler( velocity.normalized ));
+            // Debug.Log( "Time " + t + ", center " + center + ", velocity" + velocity );
+            GameObject newSegment = Instantiate( curveSegmentPrefab, center, Quaternion.LookRotation( velocity.normalized, transform.up ) ) as GameObject;
+            Vector3 segmentPosition = Random.onUnitSphere * radiusFromCurve;
+            segmentPosition.z = 0;
+            newSegment.transform.Translate( segmentPosition, Space.Self );
+            newSegment.transform.LookAt( center );
+            newSegment.transform.rotation *= Quaternion.Euler( Vector3.right * 90f);
         }
     }
     

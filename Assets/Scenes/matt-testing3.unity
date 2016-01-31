@@ -850,7 +850,7 @@ Transform:
   m_GameObject: {fileID: 597846957}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071067}
   m_LocalPosition: {x: 39.307007, y: -10.399994, z: 32.271973}
-  m_LocalScale: {x: 61.116108, y: 8.305017, z: 35.37395}
+  m_LocalScale: {x: 118.86252, y: 8.305017, z: 35.37395}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -1896,10 +1896,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curveSegmentPrefab: {fileID: 597846957}
-  radius: 50
+  radius: 70
   segmentsPerCurve: 5
+  radiusFromCurve: 100
   preferedMode: 1
-  curves: 5
+  curves: 50
   points: []
 --- !u!4 &1414563335
 Transform:
